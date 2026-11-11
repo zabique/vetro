@@ -1,0 +1,11 @@
+{
+  "id": "install-apps",
+  "name": "Install apps",
+  "version": "1.0.0",
+  "apiVersion": 1,
+  "author": "zabique",
+  "description": "Install .wgt and .tpk packages from the dashboard, signed with your own developer certificate, with a Home tile like a store app. No internet access.",
+  "permissions": ["exec"],
+  "main": "index.js",
+  "ui": { "label": "Install apps" }
+}

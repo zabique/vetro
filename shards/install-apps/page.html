@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>Install apps</title>
+<style>
+:root{--action:#3b6cf6;--edge:rgba(128,128,128,.4);--danger:#d8443a}
+*{box-sizing:border-box}
+body{font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;margin:16px;color:CanvasText;background:Canvas;max-width:980px}
+h2{font-size:17px;margin:0}
+.panel{border:1px solid var(--edge);border-radius:10px;padding:16px;margin:0 0 16px}
+.note{font-size:13px;opacity:.75}
+p.note{margin:6px 0 0}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:12px}
+.head{justify-content:space-between;margin-top:0}
+.grow{flex:1 1 220px}
+button{font:inherit;height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--edge);background:transparent;color:inherit;cursor:pointer}
+button:hover:not(:disabled){background:rgba(128,128,128,.15)}
+button:disabled{opacity:.5;cursor:default}
+button:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--action);outline-offset:2px}
+button.primary{background:var(--action);border-color:var(--action);color:#fff}
+button.primary:hover:not(:disabled){background:var(--action);filter:brightness(1.1)}
+button.danger{border-color:var(--danger);color:var(--danger)}
+input[type=search],input[type=password]{font:inherit;height:36px;width:100%;padding:0 10px;border-radius:8px;border:1px solid var(--edge);background:transparent;color:inherit}
+label.field{display:grid;gap:4px;font-size:13px}
+.drop{display:grid;gap:4px;justify-items:center;padding:20px 12px;margin:12px 0;border:2px dashed var(--edge);border-radius:10px;text-align:center;cursor:pointer}
+.drop.over{border-color:var(--action)}
+.drop input{max-width:100%}
+fieldset{border:1px solid var(--edge);border-radius:10px;margin:0;padding:10px 12px;display:grid;gap:6px}
+legend{font-size:13px;padding:0 6px}
+progress{width:100%;margin-top:12px}
+pre{margin:12px 0 0;padding:10px;border:1px solid var(--edge);border-radius:8px;max-height:220px;overflow:auto;font:12px/1.4 ui-monospace,Consolas,monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+details>summary{cursor:pointer;display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;list-style:none}
+details>summary::-webkit-details-marker{display:none}
+details>summary::before{content:"▸";opacity:.7}
+details[open]>summary::before{content:"▾"}
+.certs{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-top:12px}
+.pkg-list{display:grid;gap:8px;margin-top:12px}
+.pkg{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;padding:8px 12px;border:1px solid var(--edge);border-radius:10px}
+.pkg-name{font-weight:500}
+.pkg-id{font-size:13px;opacity:.75;overflow-wrap:anywhere}
+.tag{font-size:12px;padding:0 5px;border:1px solid var(--edge);border-radius:6px;margin-left:6px;opacity:.75}
+.pkg .row{margin-top:0}
+</style>
+</head>
+<body>
+
+<section class="panel">
+  <h2>Install a package</h2>
+  <p class="note">A .wgt (web app) or .tpk (native app) is uploaded to the TV, signed if you choose so, and installed.
+    The app then gets its tile on the Samsung Home row and in the Vetro launcher, like a store app.</p>
+  <label class="drop" id="drop">
+    <input type="file" id="file" accept=".wgt,.tpk">
+    <strong id="pick">Drop a .wgt or .tpk here, or choose a file</strong>
+    <span class="note">Up to 400 MB</span>
+  </label>
+  <fieldset>
+    <legend>Signature</legend>
+    <label><input type="radio" name="sign" value="sign"> Sign with my developer certificate <span class="note" id="signNote"></span></label>
+    <label><input type="radio" name="sign" value="asis" checked> Install as it is <span class="note">the package is already signed for this TV</span></label>
+  </fieldset>
+  <div class="row">
+    <button id="go" class="primary" disabled>Upload and install</button>
+    <span id="status" class="note" aria-live="polite">Choose a package.</span>
+  </div>
+  <progress id="progress" max="100" value="0" hidden></progress>
+  <pre id="log" hidden></pre>
+</section>
+
+<section class="panel">
+  <details id="certBox">
+    <summary><h2>Developer certificate</h2><span class="note" id="certState">Checking…</span></summary>
+    <p class="note">The certificate a package is signed with before it is installed: the author and distributor .p12 files
+      of your Tizen certificate profile, made for this TV. They are converted on the TV and kept there, in this
+      Shard's own settings; the passwords are used once and not kept.</p>
+    <div class="certs">
+      <label class="field"><span>Author certificate (.p12)</span><input type="file" id="authorFile" accept=".p12,.pfx"></label>
+      <label class="field"><span>Author password</span><input type="password" id="authorPw" autocomplete="off"></label>
+      <label class="field"><span>Distributor certificate (.p12)</span><input type="file" id="distFile" accept=".p12,.pfx"></label>
+      <label class="field"><span>Distributor password</span><input type="password" id="distPw" autocomplete="off"></label>
+    </div>
+    <div class="row">
+      <button id="certSave" class="primary">Save certificate</button>
+      <button id="certRemove" hidden>Remove from the TV</button>
+      <span id="certStatus" class="note" aria-live="polite"></span>
+    </div>
+  </details>
+</section>
+
+<section class="panel">
+  <div class="row head"><h2>Installed apps</h2><button id="refresh">Refresh</button></div>
+  <div class="row">
+    <label class="field grow"><span>Filter</span><input id="filter" type="search" placeholder="Name or package id"></label>
+    <label><input id="system" type="checkbox"> Show system packages</label>
+  </div>
+  <div id="apps" class="pkg-list"><p class="note">Reading the installed apps…</p></div>
+</section>
+
+<script>
+function $(id){return document.getElementById(id)}
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function bytes(n){return n<1024?n+' B':n<1048576?(n/1024).toFixed(0)+' KB':(n/1048576).toFixed(1)+' MB'}
+/* the answer as JSON whatever the status: install and certificate errors carry details */
+function post(url,body){return fetch(url,body===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+  .then(function(r){return r.json().catch(function(){return {error:'The TV answered '+r.status}})})}
+function api(url,body){return post(url,body).then(function(d){if(d&&d.error&&d.ok!==true)throw new Error(d.error);return d})}
+function base64Of(blob){return new Promise(function(ok,no){var r=new FileReader();r.onload=function(){ok(String(r.result).split(',')[1]||'')};
+  r.onerror=function(){no(new Error('Could not read the file'))};r.readAsDataURL(blob)})}
+
+/* ── the certificate ── */
+var haveCert=false;
+function showCert(c){haveCert=!!(c&&c.author);
+  $('certState').textContent=haveCert?'On the TV: '+(c.author.subject||'author certificate')+(c.author.notAfter?' · valid until '+c.author.notAfter:'')+(c.distributor?'':' · no distributor certificate'):'Not set';
+  $('signNote').textContent=haveCert?'':'add it below first';
+  $('certRemove').hidden=!haveCert;
+  var radios=document.querySelectorAll('input[name=sign]');radios[0].disabled=!haveCert;
+  if(!haveCert)radios[1].checked=true}
+function loadCert(first){api('cert').then(function(c){showCert(c);if(first&&haveCert)document.querySelector('input[name=sign][value=sign]').checked=true})
+  .catch(function(e){$('certState').textContent=e.message})}
+$('certSave').onclick=function(){var a=$('authorFile').files[0],d=$('distFile').files[0],b=this;
+  if(!a){$('certStatus').textContent='Choose the author .p12 file.';return}
+  if(a.size>60000||(d&&d.size>60000)){$('certStatus').textContent='That is too large to be a .p12 certificate.';return}
+  b.disabled=true;$('certStatus').textContent='Converting on the TV…';
+  Promise.all([base64Of(a),d?base64Of(d):null]).then(function(f){
+    return api('cert',{author:{p12:f[0],password:$('authorPw').value},distributor:f[1]?{p12:f[1],password:$('distPw').value}:null})})
+  .then(function(c){showCert(c);$('certStatus').textContent='Saved on the TV.';$('authorPw').value='';$('distPw').value='';$('authorFile').value='';$('distFile').value='';
+    document.querySelector('input[name=sign][value=sign]').checked=true})
+  .catch(function(e){$('certStatus').textContent=e.message}).then(function(){b.disabled=false})};
+$('certRemove').onclick=function(){var b=this;if(b.dataset.sure!=='1'){b.dataset.sure='1';b.textContent='Really remove?';b.classList.add('danger');
+    setTimeout(function(){b.dataset.sure='';b.textContent='Remove from the TV';b.classList.remove('danger')},4000);return}
+  api('cert',{remove:true}).then(function(c){showCert(c);$('certStatus').textContent='Removed.'}).catch(function(e){$('certStatus').textContent=e.message})};
+
+/* ── upload and install ── */
+var picked=null,working=false;
+function log(t){var l=$('log');l.hidden=false;l.textContent+=t+String.fromCharCode(10);l.scrollTop=l.scrollHeight}
+function pick(f){if(!f)return;var ext=(f.name.split('.').pop()||'').toLowerCase();
+  if(ext!=='wgt'&&ext!=='tpk'){$('status').textContent='Choose a .wgt or .tpk file.';return}
+  picked=f;$('pick').textContent=f.name+' · '+bytes(f.size);$('go').disabled=working;$('status').textContent='Ready to install.'}
+$('file').onchange=function(){pick(this.files&&this.files[0])};
+var drop=$('drop');
+drop.ondragover=function(e){e.preventDefault();drop.classList.add('over')};
+drop.ondragleave=function(){drop.classList.remove('over')};
+drop.ondrop=function(e){e.preventDefault();drop.classList.remove('over');if(e.dataTransfer&&e.dataTransfer.files.length)pick(e.dataTransfer.files[0])};
+$('go').onclick=function(){if(!picked||working)return;
+  var f=picked,name=f.name.replace(/[^A-Za-z0-9._-]/g,'_'),size=512*1024,total=Math.max(1,Math.ceil(f.size/size)),n=0;
+  var sign=document.querySelector('input[name=sign]:checked').value==='sign';
+  working=true;$('go').disabled=true;$('log').textContent='';$('progress').hidden=false;$('progress').value=0;
+  log('Uploading '+f.name+' ('+bytes(f.size)+')');
+  function chunk(){return base64Of(f.slice(n*size,Math.min(f.size,(n+1)*size))).then(function(b64){
+      return api('upload',{filename:name,chunk:n,totalChunks:total,data:b64})}).then(function(d){
+      n++;var pct=Math.round(n*100/total);$('progress').value=pct;$('status').textContent='Uploading '+pct+'%';return n<total?chunk():d})}
+  chunk().then(function(d){log('Uploaded. '+(sign?'Signing and installing…':'Installing…'));
+    $('status').textContent=sign?'Signing and installing on the TV…':'Installing on the TV…';
+    return post('install',{file:d.file,sign:sign})})
+  .then(function(r){if(r.output)log(r.output);
+    if(r.ok){var extra=[];if(r.signed)extra.push('signed');if(r.registry&&r.registry.registered)extra.push('added to the app list');
+      if(r.homeRow&&r.homeRow.added)extra.push('tile added to the Home row');
+      log('Installed '+(r.packageId||'')+(extra.length?' · '+extra.join(', '):''));$('status').textContent='Installed '+(r.packageId||f.name)+'.';loadApps()}
+    else{log('Failed'+(r.step==='sign'?' while signing':'')+': '+(r.error||('pkgcmd exit '+r.exit_code)));$('status').textContent='Installation failed. See the log.'}})
+  .catch(function(e){log('Failed: '+e.message);$('status').textContent=e.message})
+  .then(function(){working=false;$('go').disabled=!picked})};
+
+/* ── installed apps ── */
+var list=[];
+function loadApps(){$('apps').innerHTML='<p class="note">Reading the installed apps…</p>';
+  return api('apps').then(function(d){list=d.apps||[];render()}).catch(function(e){$('apps').innerHTML='<p class="note">'+esc(e.message)+'</p>'})}
+function render(){var q=$('filter').value.toLowerCase(),sys=$('system').checked;
+  var shown=list.filter(function(a){return (sys||!a.system)&&((a.name+' '+a.packageId+' '+(a.appId||'')).toLowerCase().indexOf(q)>=0)});
+  $('apps').innerHTML=shown.length?shown.map(function(a){return '<div class="pkg"><div><div class="pkg-name">'+esc(a.name)+'<span class="tag">'+esc(a.type)+'</span>'+
+    (a.system?'<span class="tag">system</span>':'')+'</div><div class="pkg-id">'+esc(a.packageId)+(a.version?' · '+esc(a.version):'')+'</div></div><div class="row">'+
+    (a.appId?'<button data-launch="'+esc(a.appId)+'">Launch</button>':'')+
+    (a.system?'':'<button data-home="'+esc(a.packageId)+'">Add to Home</button><button data-uninstall="'+esc(a.packageId)+'">Uninstall</button>')+'</div></div>'}).join('')
+    :'<p class="note">No apps match.</p>'}
+$('filter').oninput=render;$('system').onchange=render;$('refresh').onclick=loadApps;
+$('apps').onclick=function(e){var b=e.target.closest('button');if(!b)return;var d=b.dataset,was=b.textContent;
+  function done(t){b.disabled=false;b.textContent=t;setTimeout(function(){b.textContent=was},3000)}
+  if(d.launch){b.disabled=true;api('launch',{appId:d.launch}).then(function(){done('Launched')}).catch(function(x){done(x.message)})}
+  else if(d.home){b.disabled=true;api('register',{packageId:d.home}).then(function(r){done(r.homeRow&&r.homeRow.added?'Added':'Already there')}).catch(function(x){done(x.message)})}
+  else if(d.uninstall){
+    /* a sandboxed page cannot ask with a dialog: the button asks a second time */
+    if(d.sure!=='1'){d.sure='1';b.textContent='Really uninstall?';b.classList.add('danger');
+      setTimeout(function(){if(b.isConnected&&!b.disabled){d.sure='';b.textContent='Uninstall';b.classList.remove('danger')}},4000);return}
+    b.disabled=true;b.textContent='Uninstalling…';
+    api('uninstall',{packageId:d.uninstall}).then(function(){loadApps()}).catch(function(x){b.disabled=false;d.sure='';b.classList.remove('danger');b.textContent=x.message})}};
+
+loadCert(true);loadApps();
+</script>
+</body>
+</html>

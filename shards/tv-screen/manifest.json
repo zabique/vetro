@@ -1,0 +1,11 @@
+{
+  "id": "tv-screen",
+  "name": "TV Screen",
+  "version": "1.2.0",
+  "apiVersion": 1,
+  "author": "local",
+  "description": "See the TV screen (picture or live view) and drive it with a full remote, long presses and this computer's keyboard.",
+  "permissions": ["exec"],
+  "main": "index.js",
+  "ui": { "label": "TV-Screen" }
+}

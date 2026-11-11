@@ -1,0 +1,32 @@
+const assert=require('assert').strict,path=require('path'),fs=require('fs');
+let saved={};const dir=path.join(require('os').tmpdir(),'tv-screen-shard-test'),cmds=[];
+const ctx={id:'tv-screen',dir,config:{get(){return saved},set(v){saved=v}},execute(c){cmds.push(c);return Promise.resolve({exit_code:0,stdout:''})}};
+fs.rmSync(dir,{recursive:true,force:true});fs.cpSync(path.join(__dirname,'tv-screen'),dir,{recursive:true});
+const p=require(path.join(dir,'index.js'))(ctx);
+p.start();
+assert.ok(fs.existsSync(path.join(dir,'bin','TvCapture.dll')));
+assert.equal(fs.readFileSync(path.join(dir,'bin','TvCapture.dll')).length,18944);
+assert.equal(cmds.length,1,'first start stops an old helper');
+p.start();assert.equal(cmds.length,1,'unchanged helper is left alone');
+const I=p._internals;
+assert.equal(I.checkEvents([{key:'constructor'}]),null);assert.equal(I.checkEvents([{key:'a; reboot'}]),null);
+assert.deepEqual(I.checkEvents([{key:'a'}]),[{key:'a',state:'press'}]);
+assert.equal(I.eventsCommand([{key:'a',state:'press'}]).split('; ').length,2);
+function call(method,sub,url,body){return new Promise(r=>{const EE=require('events');const req=new EE();req.method=method;req.url=url||('/x/'+sub);
+ const res={headersSent:false,on(){},writeHead(c,h){this.code=c;this.h=h;this.headersSent=true},end(b){r({code:this.code,h:this.h,body:b})}};
+ const handled=p.route(req,res,sub);if(!handled)return r({handled:false});if(body!==undefined){req.emit('data',body);req.emit('end');}});}
+(async()=>{
+ let r=await call('GET','ui');assert.equal(r.code,200);assert.ok(String(r.body).includes('id="screenKeys"'));
+ r=await call('POST','control',null,JSON.stringify({events:[{key:'Up',state:'down'}]}));assert.deepEqual(JSON.parse(r.body),{ok:true,sent:1});
+ assert.equal(p.status().keysHeld,1);
+ r=await call('POST','control',null,JSON.stringify({release:true}));assert.deepEqual(JSON.parse(r.body).released,['Up']);
+ r=await call('POST','control',null,'{"events":[{"key":"rm -rf"}]}');assert.equal(r.code,400);
+ r=await call('POST','control',null,'nonsense');assert.equal(r.code,400);
+ r=await call('GET','file','/x/file?id=screen&at=1');assert.equal(r.code,404);
+ r=await call('GET','prefs');assert.deepEqual(JSON.parse(r.body),{zoom:'fit',keys:true});
+ r=await call('POST','prefs',null,JSON.stringify({zoom:'2',keys:false,x:1}));assert.deepEqual(saved,{zoom:'2',keys:false});
+ r=await call('POST','prefs',null,JSON.stringify({zoom:'9'}));assert.deepEqual(JSON.parse(r.body),{zoom:'2',keys:false});
+ r=await call('GET','nothing');assert.equal(r.handled,false);
+ r=await call('GET','shot');assert.equal(r.code,503);
+ p.stop();console.log('shard smoke: ok');
+})().catch(e=>{console.error(e);process.exit(1)});

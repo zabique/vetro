@@ -100,7 +100,7 @@ assert.equal(he.setEnabled('fine', true).state, 'running');
 assert.equal(global.__fineStarted, 1);
 let rr = res(); rr.setHeader = (k, v) => { rr[k] = v; };
 he.handle({ method: 'GET', headers: { origin: 'null' } }, rr, '/plugins/fine/api/x', json);
-assert.equal(rr['Content-Security-Policy'], 'sandbox allow-scripts');
+assert.equal(rr['Content-Security-Policy'], 'sandbox allow-scripts allow-downloads');
 assert.equal(rr['Access-Control-Allow-Origin'], 'null');
 rr = res(); he.handle({ method: 'POST' }, rr, '/plugins/badjson/enable', json);
 assert.equal(rr.code, 409);

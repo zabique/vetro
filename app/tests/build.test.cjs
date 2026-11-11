@@ -23,8 +23,11 @@ assert.deepEqual(names.filter(name => !name.startsWith('native/dock/res/')).sort
     'service/plugin-launcher.js', 'service/disabled-ledger.js', 'service/restore.js',
     'service/updater.js', 'service/update-key.js', 'service/plugin-key.js',
     'service/privacy.js', 'service/probe.js', 'service/quick-settings.js', 'service/quick-wins.js', 'service/keep-removed.js', 'service/leftovers.js', 'service/remap.js',
-    'service/samsung-remote.js', 'service/screen-status.js', 'service/settings.js', 'service/stale-service.js', 'service/system-monitor.js','service/tv-settings.js'
-].sort());
+    'service/samsung-remote.js', 'service/screen-status.js', 'service/settings.js', 'service/stale-service.js', 'service/system-monitor.js','service/tv-settings.js',
+    // Local extras: screen sharing and installing apps (the signer is kept out of git, so only when present).
+    'native/capture/TvCapture.dll', 'native/capture/TvCapture.runtimeconfig.json',
+    'service/screen-capture.js', 'service/sideload.js', 'service/webapp-registry.js'
+].concat(require('fs').existsSync(require('path').join(__dirname, '..', 'service', 'signer.js')) ? ['service/signer.js'] : []).sort());
 // A service file that requires a sibling the package does not carry crashes the whole service on the TV at start.
 files.filter(file => /^service\/[^/]+\.js$/.test(decodeURIComponent(file.uri))).forEach(file => {
     const owner = decodeURIComponent(file.uri), text = file.data.toString(), pattern = /require\('\.\/([^']+)'\)/g;

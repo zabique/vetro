@@ -63,6 +63,10 @@ var dock = new dockModule.Dock({execute: agentExecute,
             return dockModule.customAppCheck(d.apps, appId, !!fresh);
         });
     }});
+// Local extras (zabique's fork, ported to 0.5.0): screen sharing and installing apps from the dashboard.
+var screenCapture = new (require('./screen-capture.js').Capture)(agentExecute);
+var webappRegistry = new (require('./webapp-registry.js').Registry)(agentExecute);
+var sideload = new (require('./sideload.js').Sideload)({execute: agentExecute, registry: webappRegistry, homeOrder: homeOrder, dock: dock});
 var hbbtv = new (require('./hbbtv.js').Control)(agentExecute);
 // #135: factory, hotel and shop apps, and the Aging key AgingApp can leave at 1 (factory-apps.js).
 var factoryApps = require('./factory-apps.js');
@@ -350,11 +354,28 @@ function handleExecStatus(res) {
 // One remote press per call: the key name is whitelisted (control.js) and
 // the command is built from the whitelist, never from request text.
 
+var heldKeys = new control.Held(function (events) {
+    agentExecute(control.eventsCommand(events), 10000).catch(function () { /* the TV is away: nothing is held */ });
+});
+
 function handleControl(req, res) {
     if (req.method === 'GET') {
         return serveJson(res, { keys: control.KEYS });
     }
     readJsonBody(req, res, function (parsed) {
+        // Down/up events (a held button, the PC keyboard): {events:[{key,state}]}, {key,state} or {release:true}.
+        if (parsed.release === true) return serveJson(res, { ok: true, released: heldKeys.releaseAll() });
+        var events = parsed.events !== undefined ? parsed.events : parsed.state !== undefined ? [{ key: parsed.key, state: parsed.state }] : null;
+        if (events) {
+            var checked = control.checkEvents(events);
+            if (!checked) return serveJson(res, { error: 'events: up to ' + control.MAX_EVENTS + ' of {key, state: down|up|press} with keys from GET /control' }, 400);
+            heldKeys.note(checked);
+            return agentExecute(control.eventsCommand(checked), 10000).then(function (r) {
+                serveJson(res, { ok: r.exit_code === 0, sent: checked.length });
+            }).catch(function (e) {
+                serveJson(res, { ok: false, error: String(e.message || e) }, 503);
+            });
+        }
         var key = parsed.key;
         if (!key || typeof key !== 'string') {
             return serveJson(res, { error: 'missing "key" (see GET /control for names)' }, 400);
@@ -853,6 +874,7 @@ var server = http.createServer(function (req, res) {
             return res.end();
         }
     }
+    if (sideload.handle(url, req, res, readJsonBody, serveJson)) return;
     if (req.method === 'POST') {
         if (url === '/input') return handleInput(req,res);
         if (url === '/apps/launch') return handleLaunch(req,res);
@@ -885,6 +907,11 @@ var server = http.createServer(function (req, res) {
     }
     if (url === '/dns') return dnsFilter.status().then(function(d){serveJson(res,d)}).catch(function(e){serveJson(res,{error:e.message},503)});
     if (url === '/dock/icon') return plugins.dispatch('launcher', req, res, 'icon', serveJson);
+    // Screen (TV › Screen): one capture, its window files, and the MJPEG live view (screen-capture.js).
+    if (url === '/screenshot') return screenCapture.take().then(function(d){serveJson(res,d)}).catch(function(e){serveJson(res,{error:e.message},503)});
+    if (url === '/screenshot/stream') return screenCapture.live('/stream', res, true, (req.url.split('?')[1] || ''));
+    if (url === '/screenshot/live') return screenCapture.live('/status', res, false);
+    if (url === '/screenshot/file') {var sq=require('url').parse(req.url,true).query,png=screenCapture.file(sq.id,sq.at);if(!png)return serveJson(res,{error:'capture unavailable'},404);res.writeHead(200,{'Content-Type':'image/png','Cache-Control':'no-store'});return res.end(png);}
     if (url === '/dock') return plugins.dispatch('launcher', req, res, 'status', serveJson);
     if (url === '/home-order') return homeOrder.read().then(function(d){serveJson(res,d)}).catch(function(e){serveJson(res,{error:e.message},503)});
     if (url === '/restore') return handleRestore(req,res);

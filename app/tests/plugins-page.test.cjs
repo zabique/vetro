@@ -32,7 +32,7 @@ assert.match(html, /It could not start: /, 'a plugin that fails to start is not 
 assert.match(html, /Could not refresh the plugins/, 'a failed refresh does not leave stale data unannounced');
 assert.match(html, /not \x27\+e\.id|not '\+e\.id/, 'the downloaded bundle must be the one the list names');
 assert.match(html, /\/session',\{\}\)\.then\(function\(d\)\{if\(pluginView===id2\)\$\('pluginFrame'\)\.src=d\.path/, 'a plugin page is opened with its own session URL');
-assert.match(html, /id="pluginFrame"[^>]*sandbox="allow-scripts"/);
+assert.match(html, /id="pluginFrame"[^>]*sandbox="allow-scripts allow-downloads"/);
 console.log('plugins page: ok');
 
 // Vetro's own features are not plugins: the MQTT bridge is started by main.js itself.

@@ -666,7 +666,7 @@ PluginHost.prototype.handle = function (req, res, pathname, json, readBody) {
     var handled = false, errorsBefore = entry.errors;
     // A plugin page is untrusted content: sandboxed even when opened on its own, and
     // readable by the sandboxed dashboard frame (opaque origin) through CORS.
-    res.setHeader('Content-Security-Policy', 'sandbox allow-scripts');
+    res.setHeader('Content-Security-Policy', 'sandbox allow-scripts allow-downloads');
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('Referrer-Policy', 'no-referrer');
     if (req.headers && req.headers.origin === 'null') {

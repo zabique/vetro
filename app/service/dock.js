@@ -183,6 +183,18 @@ function check(r, what) {
 }
 
 // What is running right now. Only the dock's own pid counts, and only if that pid is our dll.
+// Opens the launcher overlay the way the remote's Vetro button does: the running dock reads one line from its
+// FIFO. A write to the FIFO with no reader would block, so this only runs while the dock is up, and the write
+// is backgrounded (setsid) so a momentary gap can never hold the request. Fixed command, no request text.
+Dock.prototype.show = function () {
+    var self = this;
+    return this.probe().then(function (st) {
+        if (!st.running) return {ok: false, running: false, error: 'The launcher is off. Turn it on in the Launcher tab, then try again.'};
+        return self.execute(wrap("setsid sh -c 'echo show > " + FIFO + "' >/dev/null 2>&1 &"), 6000)
+            .then(function () { return {ok: true, running: true}; });
+    });
+};
+
 Dock.prototype.probe = function () {
     var script = [
         'p=$(cat ' + PID_FILE + ' 2>/dev/null)',

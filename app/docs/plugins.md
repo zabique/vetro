@@ -86,7 +86,7 @@ A bundle is **text only**: up to 20 files, 512 KB in total, file names `a-z A-Z 
 ### The plugin page
 
 With `ui`, `GET /plugins/<id>/api/ui` must return an HTML page. It is shown in a sandboxed frame
-(`allow-scripts`, no same-origin): use **relative URLs** (`fetch("count")`), no cookies, no storage. The page URL holds a session token
+(`allow-scripts allow-downloads`, no same-origin: a page can offer a file to save, for example a picture it made): use **relative URLs** (`fetch("count")`), no cookies, no storage. The page URL holds a session token
 that opens your routes and expires after 8 hours or when the plugin is switched off: build every request from a relative URL and the token follows.
 JSON `POST` works: the host answers the CORS preflight. Dark/light: add `<meta name="color-scheme" content="light dark">`.
 

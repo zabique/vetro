@@ -5,7 +5,7 @@ fs.rmSync(dir,{recursive:true,force:true});fs.cpSync(path.join(__dirname,'tv-scr
 const p=require(path.join(dir,'index.js'))(ctx);
 p.start();
 assert.ok(fs.existsSync(path.join(dir,'bin','TvCapture.dll')));
-assert.equal(fs.readFileSync(path.join(dir,'bin','TvCapture.dll')).length,18944);
+assert.equal(fs.readFileSync(path.join(dir,'bin','TvCapture.dll')).toString('base64'),fs.readFileSync(path.join(dir,'capture.dll.b64'),'utf8').replace(/\s+/g,''));
 assert.equal(cmds.length,1,'first start stops an old helper');
 p.start();assert.equal(cmds.length,1,'unchanged helper is left alone');
 const I=p._internals;

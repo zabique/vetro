@@ -2,7 +2,8 @@
 // TV Screen: see what the TV shows (a picture or a live view) and drive it with a full remote and this
 // computer's keyboard, from a page inside Vetro Shards. Plain ES5.
 //
-// Picture: bin/TvCapture.dll (unpacked from capture.dll.b64 at start, a bundle holds text only) asks Samsung's
+// Picture: bin/TvCapture.dll (unpacked from capture.dll.b64 at start, a bundle holds text only; its source and
+// build script are in tv-screen-helper/ next to this Shard's folder in the repository) asks Samsung's
 // scaler capture library for the post-scaler frame; protected video is refused by the TV and the visible
 // windows are dumped instead. Live view: the same helper in --serve mode (MJPEG on loopback), started on demand.
 // Keys: the compositor's test interface (org.enlightenment.wm Test.EventKey), down and up as separate events.
@@ -25,7 +26,8 @@ module.exports = function (ctx) {
 
     var page = '', last = null, pending = null, starting = null, held = null;
 
-    function buffer(text, encoding) { return Buffer.from ? Buffer.from(text, encoding) : new Buffer(text, encoding); }
+    // Node 4.4 has a Buffer.from, but it is Uint8Array's and does not take a string: Buffer.alloc tells the two apart.
+    function buffer(text, encoding) { return typeof Buffer.alloc === 'function' ? Buffer.from(text, encoding) : new Buffer(text, encoding); }
     function wrap(script) { return 'echo ' + buffer(script, 'utf8').toString('base64') + ' | base64 -d | sh'; }
     function json(res, body, code) {
         if (res.headersSent) return;

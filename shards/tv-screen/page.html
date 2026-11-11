@@ -1,4 +1,11 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark light"><title>TV Screen</title><style>:root{--vetro-action:#3b6cf6;--s3:12px;--edge:rgba(128,128,128,.4);--zoom:1.5}
+<!doctype html><html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>TV Screen</title>
+<style>
+:root{--vetro-action:#3b6cf6;--s3:12px;--edge:rgba(128,128,128,.4);--zoom:1.5}
 *{box-sizing:border-box}
 body{font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;margin:16px;color:CanvasText;background:Canvas}
 .layout{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
@@ -6,11 +13,13 @@ body{font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;margin:16px;co
 .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 8px;width:0;min-width:100%}
 .bar h2{font-size:17px;margin:0 auto 0 0}
 .ui{font:inherit;height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--edge);background:transparent;color:inherit;cursor:pointer}
-.ui:hover{background:rgba(128,128,128,.15)}.ui:disabled{opacity:.5;cursor:default}
+.ui:hover{background:rgba(128,128,128,.15)}
+.ui:disabled{opacity:.5;cursor:default}
 .ui:focus-visible{outline:2px solid var(--vetro-action);outline-offset:2px}
 .ui.primary{background:var(--vetro-action);border-color:var(--vetro-action);color:#fff}
 .zoom{display:flex;border:1px solid var(--edge);border-radius:8px;overflow:hidden}
-.zoom .ui{border:0;border-radius:0;padding:0 11px}.zoom .ui[aria-pressed=true]{background:var(--vetro-action);color:#fff}
+.zoom .ui{border:0;border-radius:0;padding:0 11px}
+.zoom .ui[aria-pressed=true]{background:var(--vetro-action);color:#fff}
 .frame{position:relative;width:calc(640px*var(--zoom));max-width:100%;border:1px solid var(--edge);border-radius:8px;overflow:hidden;background:#000}
 .frame canvas{display:block;width:100%;height:auto}
 .frame img{position:absolute;top:0;left:0;width:100%;height:100%;display:block;background:#000;object-fit:fill}
@@ -20,10 +29,202 @@ body{font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;margin:16px;co
 /* Fit: the picture takes the room the remote leaves (a Shard page cannot widen the dashboard) */
 @media (min-width:900px){.layout.fit{flex-wrap:nowrap}.layout.fit .view{flex:1 1 0;width:auto}}
 .layout.fit .frame{width:100%}
-.rc-note{opacity:.75}.rc{--rc-key:#26272b;--rc-key-hi:#34353a;--rc-ink:#e9e9ec;--rc-dim:#9a9ba1;width:220px;box-sizing:border-box;padding:26px 22px 22px;border-radius:54px;background:linear-gradient(160deg,#2b2c30 0%,#17181b 55%,#101113 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.10),inset 0 -2px 6px rgba(0,0,0,.6),0 18px 40px rgba(0,0,0,.45),0 2px 6px rgba(0,0,0,.4);display:grid;gap:22px;justify-items:center;color:var(--rc-ink);user-select:none;-webkit-user-select:none}.rc button{margin:0;padding:0;min-height:0;border:0;color:var(--rc-ink);cursor:pointer;display:grid;place-items:center;background:var(--rc-key);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 2px 3px rgba(0,0,0,.5);transition:transform .06s,background .12s}.rc button:hover{background:var(--rc-key-hi)}.rc button:active{transform:scale(.94);box-shadow:inset 0 2px 4px rgba(0,0,0,.6)}.rc button:focus-visible{outline:2px solid var(--vetro-action);outline-offset:2px}.rc svg{width:22px;height:22px}.rc-top{width:100%;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;justify-items:center}.rc-power{width:40px;height:40px;border-radius:50%}.rc-power svg{color:#ff5a4f;width:20px;height:20px}.rc-mic{width:6px;height:6px;border-radius:50%;background:#050506;box-shadow:inset 0 1px 1px rgba(255,255,255,.15)}.rc-ring{position:relative;width:164px;height:164px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#2e2f34,#1c1d20 70%);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 3px 8px rgba(0,0,0,.55)}.rc .rc-dir{position:absolute;width:48px;height:48px;border-radius:50%;background:transparent;box-shadow:none;color:var(--rc-dim)}.rc .rc-dir:hover{color:var(--rc-ink);background:rgba(255,255,255,.06)}.rc-up{top:4px;left:58px}.rc-down{bottom:4px;left:58px}.rc-left{left:4px;top:58px}.rc-right{right:4px;top:58px}.rc .rc-ok{position:absolute;left:44px;top:44px;width:76px;height:76px;border-radius:50%;background:#121315;box-shadow:inset 0 2px 5px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.06);font-weight:600;font-size:15px;letter-spacing:.06em}.rc .rc-ok:hover{background:#18191c}.rc-row{display:flex;gap:44px}.rc .rc-round{width:48px;height:48px;border-radius:50%}.rc-rockers{display:flex;gap:40px}.rc-rocker{display:grid;grid-template-rows:auto auto auto;width:54px;border-radius:27px;overflow:hidden;background:var(--rc-key);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 2px 4px rgba(0,0,0,.5)}.rc .rc-rk{width:54px;border-radius:0;background:transparent;box-shadow:none;font-size:22px;font-weight:300;color:var(--rc-ink)}.rc .rc-rk:hover{background:var(--rc-key-hi)}.rc .rc-rk-top,.rc .rc-rk-bot{height:48px}.rc .rc-rk-mid{height:44px;display:grid;place-items:center;gap:0;border-top:1px solid rgba(0,0,0,.35);border-bottom:1px solid rgba(0,0,0,.35)}.rc .rc-rk-mid svg{width:17px;height:17px;color:var(--rc-dim)}.rc-rk small,.rc-label small{font-size:10px;letter-spacing:.12em;color:var(--rc-dim);font-weight:600;line-height:1}.rc .rc-rk-mid:hover svg{color:var(--rc-ink)}.rc-apps{display:flex;gap:10px;margin-top:4px}.rc .rc-app{display:flex;align-items:center;gap:7px;height:30px;padding:0 14px;border-radius:15px;font-size:12px;font-weight:600;letter-spacing:.03em;background:linear-gradient(180deg,#2f3036,#222327)}.rc .rc-app img{border-radius:4px}.rc-brand{font-size:11px;letter-spacing:.32em;color:#55565c;font-weight:700;margin-top:2px}.rc.rc-full{width:auto;display:grid;grid-template-columns:200px 200px;column-gap:26px;row-gap:14px;padding:24px 24px 18px;border-radius:44px;align-items:start}.rc-col{display:grid;gap:14px;justify-items:center;width:200px}.rc-full .rc-brand{grid-column:1/-1}.rc button{touch-action:manipulation;-webkit-touch-callout:none}.rc button.rc-held{transform:scale(.94);background:var(--rc-key-hi);box-shadow:inset 0 2px 4px rgba(0,0,0,.6)}.rc-full .rc-top{grid-template-columns:44px 1fr 44px}.rc-full .rc-row{display:flex;gap:26px}.rc .rc-sm{width:40px;height:40px}.rc .rc-sm svg{width:19px;height:19px;color:var(--rc-dim)}.rc .rc-sm:hover svg{color:var(--rc-ink)}.rc-full .rc-ring{width:156px;height:156px}.rc-full .rc-up{top:3px;left:54px}.rc-full .rc-down{bottom:3px;left:54px}.rc-full .rc-left{left:3px;top:54px}.rc-full .rc-right{right:3px;top:54px}.rc-full .rc-ok{left:42px;top:42px;width:72px;height:72px}.rc-full .rc-rockers{gap:14px;align-items:center}.rc-mid{display:grid;gap:10px}.rc .rc-txt{height:28px;min-width:50px;padding:0 8px;border-radius:14px;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--rc-dim)}.rc .rc-txt:hover{color:var(--rc-ink)}.rc-pad{display:grid;grid-template-columns:repeat(3,58px);gap:8px 13px}.rc .rc-num{height:34px;border-radius:17px;font-size:16px;font-weight:500}.rc .rc-num-s{font-size:9px;font-weight:700;letter-spacing:.06em;color:var(--rc-dim)}.rc-colors{display:grid;grid-template-columns:repeat(4,41px);gap:12px}.rc .rc-color{height:18px;border-radius:9px;font-size:9px;font-weight:800;color:rgba(0,0,0,.55)}.rc .rc-red,.rc .rc-red:hover{background:#d8443a}.rc .rc-green,.rc .rc-green:hover{background:#3fa55a}.rc .rc-yellow,.rc .rc-yellow:hover{background:#e0bb38}.rc .rc-blue,.rc .rc-blue:hover{background:#3f78d6}.rc .rc-color:hover{filter:brightness(1.15)}.rc-play{display:grid;grid-template-columns:repeat(4,41px);gap:8px 12px}.rc .rc-pb{height:32px;border-radius:16px}.rc .rc-pb svg{width:16px;height:16px;color:var(--rc-dim)}.rc .rc-pb:hover svg{color:var(--rc-ink)}.rc .rc-rec svg{color:#ff5a4f}.rc-extra{display:grid;grid-template-columns:repeat(3,62px);gap:8px 7px}.rc-extra .rc-txt{min-width:0;padding:0;font-size:9px;letter-spacing:.05em}.rc-full .rc-apps{gap:8px;margin-top:0}.rc .rc-app svg{width:17px;height:17px}.rc .rc-app[aria-pressed=true]{background:var(--vetro-action);color:#fff}.rc-note{margin:var(--s3) 0 0;max-width:450px;min-height:3.2em;font-size:12px;color:var(--vetro-muted,#9a9ba1);text-align:center}@media (max-width:560px){.rc.rc-full{grid-template-columns:200px}}.rc .rc-app{padding:0 10px}
+.rc-note{opacity:.75}
+
+/* the remote */
+.rc{--rc-key:#26272b;--rc-key-hi:#34353a;--rc-ink:#e9e9ec;--rc-dim:#9a9ba1;width:220px;box-sizing:border-box;padding:26px 22px 22px;border-radius:54px;background:linear-gradient(160deg,#2b2c30 0%,#17181b 55%,#101113 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.10),inset 0 -2px 6px rgba(0,0,0,.6),0 18px 40px rgba(0,0,0,.45),0 2px 6px rgba(0,0,0,.4);display:grid;gap:22px;justify-items:center;color:var(--rc-ink);user-select:none;-webkit-user-select:none}
+.rc button{margin:0;padding:0;min-height:0;border:0;color:var(--rc-ink);cursor:pointer;display:grid;place-items:center;background:var(--rc-key);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 2px 3px rgba(0,0,0,.5);transition:transform .06s,background .12s}
+.rc button:hover{background:var(--rc-key-hi)}
+.rc button:active{transform:scale(.94);box-shadow:inset 0 2px 4px rgba(0,0,0,.6)}
+.rc button:focus-visible{outline:2px solid var(--vetro-action);outline-offset:2px}
+.rc svg{width:22px;height:22px}
+.rc-top{width:100%;display:grid;grid-template-columns:44px 1fr 44px;align-items:center;justify-items:center}
+.rc-power{width:40px;height:40px;border-radius:50%}
+.rc-power svg{color:#ff5a4f;width:20px;height:20px}
+.rc-mic{width:6px;height:6px;border-radius:50%;background:#050506;box-shadow:inset 0 1px 1px rgba(255,255,255,.15)}
+.rc-ring{position:relative;width:164px;height:164px;border-radius:50%;background:radial-gradient(circle at 50% 40%,#2e2f34,#1c1d20 70%);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 3px 8px rgba(0,0,0,.55)}
+.rc .rc-dir{position:absolute;width:48px;height:48px;border-radius:50%;background:transparent;box-shadow:none;color:var(--rc-dim)}
+.rc .rc-dir:hover{color:var(--rc-ink);background:rgba(255,255,255,.06)}
+.rc-up{top:4px;left:58px}
+.rc-down{bottom:4px;left:58px}
+.rc-left{left:4px;top:58px}
+.rc-right{right:4px;top:58px}
+.rc .rc-ok{position:absolute;left:44px;top:44px;width:76px;height:76px;border-radius:50%;background:#121315;box-shadow:inset 0 2px 5px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.06);font-weight:600;font-size:15px;letter-spacing:.06em}
+.rc .rc-ok:hover{background:#18191c}
+.rc-row{display:flex;gap:44px}
+.rc .rc-round{width:48px;height:48px;border-radius:50%}
+.rc-rockers{display:flex;gap:40px}
+.rc-rocker{display:grid;grid-template-rows:auto auto auto;width:54px;border-radius:27px;overflow:hidden;background:var(--rc-key);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 2px 4px rgba(0,0,0,.5)}
+.rc .rc-rk{width:54px;border-radius:0;background:transparent;box-shadow:none;font-size:22px;font-weight:300;color:var(--rc-ink)}
+.rc .rc-rk:hover{background:var(--rc-key-hi)}
+.rc .rc-rk-top,.rc .rc-rk-bot{height:48px}
+.rc .rc-rk-mid{height:44px;display:grid;place-items:center;gap:0;border-top:1px solid rgba(0,0,0,.35);border-bottom:1px solid rgba(0,0,0,.35)}
+.rc .rc-rk-mid svg{width:17px;height:17px;color:var(--rc-dim)}
+.rc-rk small,.rc-label small{font-size:10px;letter-spacing:.12em;color:var(--rc-dim);font-weight:600;line-height:1}
+.rc .rc-rk-mid:hover svg{color:var(--rc-ink)}
+.rc-apps{display:flex;gap:10px;margin-top:4px}
+.rc .rc-app{display:flex;align-items:center;gap:7px;height:30px;padding:0 14px;border-radius:15px;font-size:12px;font-weight:600;letter-spacing:.03em;background:linear-gradient(180deg,#2f3036,#222327)}
+.rc.rc-full{width:auto;display:grid;grid-template-columns:200px 200px;column-gap:26px;row-gap:14px;padding:24px 24px 18px;border-radius:44px;align-items:start}
+.rc-col{display:grid;gap:14px;justify-items:center;width:200px}
+.rc button{touch-action:manipulation;-webkit-touch-callout:none}
+.rc button.rc-held{transform:scale(.94);background:var(--rc-key-hi);box-shadow:inset 0 2px 4px rgba(0,0,0,.6)}
+.rc-full .rc-top{grid-template-columns:44px 1fr 44px}
+.rc-full .rc-row{display:flex;gap:26px}
+.rc .rc-sm{width:40px;height:40px}
+.rc .rc-sm svg{width:19px;height:19px;color:var(--rc-dim)}
+.rc .rc-sm:hover svg{color:var(--rc-ink)}
+.rc-full .rc-ring{width:156px;height:156px}
+.rc-full .rc-up{top:3px;left:54px}
+.rc-full .rc-down{bottom:3px;left:54px}
+.rc-full .rc-left{left:3px;top:54px}
+.rc-full .rc-right{right:3px;top:54px}
+.rc-full .rc-ok{left:42px;top:42px;width:72px;height:72px}
+.rc-full .rc-rockers{gap:14px;align-items:center}
+.rc-mid{display:grid;gap:10px}
+.rc .rc-txt{height:28px;min-width:50px;padding:0 8px;border-radius:14px;font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--rc-dim)}
+.rc .rc-txt:hover{color:var(--rc-ink)}
+.rc-pad{display:grid;grid-template-columns:repeat(3,58px);gap:8px 13px}
+.rc .rc-num{height:34px;border-radius:17px;font-size:16px;font-weight:500}
+.rc .rc-num-s{font-size:9px;font-weight:700;letter-spacing:.06em;color:var(--rc-dim)}
+.rc-colors{display:grid;grid-template-columns:repeat(4,41px);gap:12px}
+.rc .rc-color{height:18px;border-radius:9px;font-size:9px;font-weight:800;color:rgba(0,0,0,.55)}
+.rc .rc-red,.rc .rc-red:hover{background:#d8443a}
+.rc .rc-green,.rc .rc-green:hover{background:#3fa55a}
+.rc .rc-yellow,.rc .rc-yellow:hover{background:#e0bb38}
+.rc .rc-blue,.rc .rc-blue:hover{background:#3f78d6}
+.rc .rc-color:hover{filter:brightness(1.15)}
+.rc-play{display:grid;grid-template-columns:repeat(4,41px);gap:8px 12px}
+.rc .rc-pb{height:32px;border-radius:16px}
+.rc .rc-pb svg{width:16px;height:16px;color:var(--rc-dim)}
+.rc .rc-pb:hover svg{color:var(--rc-ink)}
+.rc .rc-rec svg{color:#ff5a4f}
+.rc-extra{display:grid;grid-template-columns:repeat(3,62px);gap:8px 7px}
+.rc-extra .rc-txt{min-width:0;padding:0;font-size:9px;letter-spacing:.05em}
+.rc-full .rc-apps{gap:8px;margin-top:0}
+.rc .rc-app svg{width:17px;height:17px}
+.rc .rc-app[aria-pressed=true]{background:var(--vetro-action);color:#fff}
+.rc-note{margin:var(--s3) 0 0;max-width:450px;min-height:3.2em;font-size:12px;color:var(--vetro-muted,#9a9ba1);text-align:center}
+@media (max-width:560px){.rc.rc-full{grid-template-columns:200px}}
+.rc .rc-app{padding:0 10px}
 .rc .rc-more{width:100%;height:26px}
 .rc.rc-full.rc-collapsed{grid-template-columns:200px}
-.rc-collapsed .rc-keys{display:none}</style></head><body><div class="layout fit" id="layout"><div class="view"><div class="bar"><h2>TV screen</h2><div class="zoom" id="zoom" role="group" aria-label="Picture size"><button class="ui" data-zoom="fit" aria-pressed="true">Fit</button><button class="ui" data-zoom="1" aria-pressed="false">1×</button><button class="ui" data-zoom="1.5" aria-pressed="false">1.5×</button><button class="ui" data-zoom="2" aria-pressed="false">2×</button></div><button class="ui primary" id="live">Watch live</button><button class="ui" id="shot">Take a picture</button></div><p class="status" id="status" aria-live="polite"></p><div class="frame"><canvas id="canvas" width="1920" height="1080" role="img" aria-label="TV screen picture"></canvas><img id="stream" alt="Live TV screen" crossorigin="anonymous" hidden></div></div><div class="remote"><div class="rc rc-full" id="screenKeys" role="group" aria-label="TV remote"><div class="rc-col"><div class="rc-top"><button class="rc-power" data-key="XF86PowerOff" aria-label="Power" title="Power"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v8"/><path d="M6.3 6.8a8 8 0 1 0 11.4 0"/></svg></button><span class="rc-mic" aria-hidden="true"></span><button class="rc-round rc-sm" data-key="XF86Display" aria-label="Source" title="Source"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="12" height="16" rx="2"/><path d="M2 12h11"/><path d="m9.5 8.5 3.5 3.5-3.5 3.5"/></svg></button></div><div class="rc-row"><button class="rc-round rc-sm" data-key="XF86SysMenu" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button><button class="rc-round rc-sm" data-key="XF86Info" aria-label="Info" title="Info"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><path d="M12 7.5v.5"/></svg></button><button class="rc-round rc-sm" data-key="XF86ChannelGuide" aria-label="Guide" title="Guide"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11"/></svg></button></div><div class="rc-ring"><button class="rc-dir rc-up" data-key="Up" aria-label="Up" title="Up"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg></button><button class="rc-dir rc-left" data-key="Left" aria-label="Left" title="Left"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button><button class="rc-dir rc-right" data-key="Right" aria-label="Right" title="Right"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button><button class="rc-dir rc-down" data-key="Down" aria-label="Down" title="Down"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button><button class="rc-ok" data-key="Return" aria-label="OK" title="OK"><span>OK</span></button></div><div class="rc-row"><button class="rc-round" data-key="XF86Back" aria-label="Back" title="Back"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button><button class="rc-round" data-key="XF86Home" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5.5 9.5V20h13V9.5"/></svg></button><button class="rc-round" data-key="XF86Exit" aria-label="Exit" title="Exit"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="rc-rockers"><div class="rc-rocker" role="group" aria-label="Volume"><button class="rc-rk rc-rk-top" data-key="XF86AudioRaiseVolume" aria-label="Volume up" title="Volume up"><span>+</span></button><button class="rc-rk rc-rk-mid" data-key="XF86AudioMute" aria-label="Mute" title="Mute"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 6"/><path d="m21 9-5 6"/></svg><small>VOL</small></button><button class="rc-rk rc-rk-bot" data-key="XF86AudioLowerVolume" aria-label="Volume down" title="Volume down"><span>−</span></button></div><div class="rc-mid"><button class="rc-txt" data-key="XF86NumberPad" aria-label="Number pad on the TV" title="Number pad on the TV"><span>123</span></button><button class="rc-txt" data-key="XF86ChannelList" aria-label="Channel list" title="Channel list"><span>LIST</span></button><button class="rc-txt" data-key="XF86Search" aria-label="Search" title="Search"><span>FIND</span></button></div><div class="rc-rocker" role="group" aria-label="Channel"><button class="rc-rk rc-rk-top" data-key="XF86RaiseChannel" aria-label="Channel up" title="Channel up"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg></button><span class="rc-rk rc-rk-mid rc-label"><small>CH</small></span><button class="rc-rk rc-rk-bot" data-key="XF86LowerChannel" aria-label="Channel down" title="Channel down"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button></div></div><div class="rc-apps"><button id="screenLauncher" class="rc-app" aria-label="Vetro launcher" title="Open the Vetro launcher on the TV">Launcher</button><button id="screenKbd" class="rc-app" aria-pressed="false" title="Send this computer&#39;s keyboard to the TV"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M6 14h.01M18 14h.01M9.5 14h5"/></svg>Keyboard</button></div><button id="rcMore" class="rc-txt rc-more" aria-expanded="true" aria-controls="rcKeys" title="Show or hide the number pad and the extra keys">‹ HIDE KEYS</button></div><div class="rc-col rc-keys" id="rcKeys"><div class="rc-pad" role="group" aria-label="Number pad"><button class="rc-num" data-key="1" aria-label="1" title="1"><span>1</span></button><button class="rc-num" data-key="2" aria-label="2" title="2"><span>2</span></button><button class="rc-num" data-key="3" aria-label="3" title="3"><span>3</span></button><button class="rc-num" data-key="4" aria-label="4" title="4"><span>4</span></button><button class="rc-num" data-key="5" aria-label="5" title="5"><span>5</span></button><button class="rc-num" data-key="6" aria-label="6" title="6"><span>6</span></button><button class="rc-num" data-key="7" aria-label="7" title="7"><span>7</span></button><button class="rc-num" data-key="8" aria-label="8" title="8"><span>8</span></button><button class="rc-num" data-key="9" aria-label="9" title="9"><span>9</span></button><button class="rc-num rc-num-s" data-key="XF86TTXMIX" aria-label="Teletext" title="Teletext"><span>TTX</span></button><button class="rc-num" data-key="0" aria-label="0" title="0"><span>0</span></button><button class="rc-num rc-num-s" data-key="XF86PreviousChannel" aria-label="Previous channel" title="Previous channel"><span>PRE-CH</span></button></div><div class="rc-colors" role="group" aria-label="Colour keys"><button class="rc-color rc-red" data-key="XF86Red" aria-label="Red (A)" title="Red (A)"><span>A</span></button><button class="rc-color rc-green" data-key="XF86Green" aria-label="Green (B)" title="Green (B)"><span>B</span></button><button class="rc-color rc-yellow" data-key="XF86Yellow" aria-label="Yellow (C)" title="Yellow (C)"><span>C</span></button><button class="rc-color rc-blue" data-key="XF86Blue" aria-label="Blue (D)" title="Blue (D)"><span>D</span></button></div><div class="rc-play" role="group" aria-label="Playback"><button class="rc-pb" data-key="XF86AudioRewind" aria-label="Rewind" title="Rewind"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" stroke="none"><path d="M11 6v12l-8-6zM21 6v12l-8-6z"/></svg></button><button class="rc-pb" data-key="XF86AudioPlay" aria-label="Play" title="Play"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" stroke="none"><path d="M7 5v14l12-7z"/></svg></button><button class="rc-pb" data-key="XF86AudioPause" aria-label="Pause" title="Pause"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" stroke="none"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg></button><button class="rc-pb" data-key="XF86AudioForward" aria-label="Fast forward" title="Fast forward"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" stroke="none"><path d="M13 6v12l8-6zM3 6v12l8-6z"/></svg></button><button class="rc-pb" data-key="XF86AudioPrev" aria-label="Previous" title="Previous"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" stroke="none"><path d="M6 5h2.5v14H6zM20 5v14l-10-7z"/></svg></button><button class="rc-pb" data-key="XF86AudioStop" aria-label="Stop" title="Stop"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" stroke="none"><rect x="6" y="6" width="12" height="12" rx="1"/></svg></button><button class="rc-pb rc-rec" data-key="XF86AudioRecord" aria-label="Record" title="Record"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="6"/></svg></button><button class="rc-pb" data-key="XF86AudioNext" aria-label="Next" title="Next"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" stroke="none"><path d="M15.5 5H18v14h-2.5zM4 5v14l10-7z"/></svg></button></div><div class="rc-extra"><button class="rc-txt" data-key="XF86Caption" aria-label="Subtitles" title="Subtitles"><span>SUBT</span></button><button class="rc-txt" data-key="XF86AudioDescription" aria-label="Audio description" title="Audio description"><span>AD</span></button><button class="rc-txt" data-key="XF86PictureSize" aria-label="Picture size" title="Picture size"><span>P.SIZE</span></button><button class="rc-txt" data-key="XF86DiscretSourceTV" aria-label="Live TV" title="Live TV"><span>TV</span></button><button class="rc-txt" data-key="XF86Apps" aria-label="Apps" title="Apps"><span>APPS</span></button><button class="rc-txt" data-key="XF86EManual" aria-label="e-Manual" title="e-Manual"><span>E-MANUAL</span></button><button class="rc-txt" data-key="XF86MultiView" aria-label="Multi View" title="Multi View"><span>MULTI</span></button><button class="rc-txt" data-key="XF86Ambient" aria-label="Ambient mode" title="Ambient mode"><span>AMBIENT</span></button><button class="rc-txt" data-key="XF86Sleep" aria-label="Sleep timer" title="Sleep timer"><span>SLEEP</span></button><button class="rc-txt" data-key="XF86Netflix" aria-label="Netflix" title="Netflix"><span>NETFLIX</span></button><button class="rc-txt" data-key="XF86Amazon" aria-label="Prime Video" title="Prime Video"><span>PRIME</span></button><button class="rc-txt" data-key="XF86KeyTVPlus" aria-label="Samsung TV Plus" title="Samsung TV Plus"><span>TV PLUS</span></button></div></div><div class="rc-brand" aria-hidden="true">SAMSUNG</div></div><p class="rc-note" id="screenKbdNote" aria-live="polite">Hold a button for a long press.</p></div></div><script>function $(id){return document.getElementById(id)}
+.rc-collapsed .rc-keys{display:none}
+</style>
+</head>
+<body>
+<div class="layout fit" id="layout">
+<div class="view">
+<div class="bar"><h2>TV screen</h2>
+<div class="zoom" id="zoom" role="group" aria-label="Picture size">
+  <button class="ui" data-zoom="fit" aria-pressed="true">Fit</button>
+  <button class="ui" data-zoom="1" aria-pressed="false">1×</button>
+  <button class="ui" data-zoom="1.5" aria-pressed="false">1.5×</button>
+  <button class="ui" data-zoom="2" aria-pressed="false">2×</button>
+</div>
+  <button class="ui primary" id="live">Watch live</button>
+  <button class="ui" id="shot">Take a picture</button>
+</div>
+  <p class="status" id="status" aria-live="polite"></p>
+<div class="frame">
+  <canvas id="canvas" width="1920" height="1080" role="img" aria-label="TV screen picture"></canvas>
+  <img id="stream" alt="Live TV screen" crossorigin="anonymous" hidden>
+</div></div>
+<div class="remote">
+<div class="rc rc-full" id="screenKeys" role="group" aria-label="TV remote">
+<div class="rc-col">
+<div class="rc-top">
+  <button class="rc-power" data-key="XF86PowerOff" aria-label="Power" title="Power"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v8"/><path d="M6.3 6.8a8 8 0 1 0 11.4 0"/></svg></button>
+  <span class="rc-mic" aria-hidden="true"></span>
+  <button class="rc-round rc-sm" data-key="XF86Display" aria-label="Source" title="Source"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="4" width="12" height="16" rx="2"/><path d="M2 12h11"/><path d="m9.5 8.5 3.5 3.5-3.5 3.5"/></svg></button>
+</div>
+<div class="rc-row">
+  <button class="rc-round rc-sm" data-key="XF86SysMenu" aria-label="Settings" title="Settings"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg></button>
+  <button class="rc-round rc-sm" data-key="XF86Info" aria-label="Info" title="Info"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6"/><path d="M12 7.5v.5"/></svg></button>
+  <button class="rc-round rc-sm" data-key="XF86ChannelGuide" aria-label="Guide" title="Guide"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11"/></svg></button>
+</div>
+<div class="rc-ring">
+  <button class="rc-dir rc-up" data-key="Up" aria-label="Up" title="Up"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg></button>
+  <button class="rc-dir rc-left" data-key="Left" aria-label="Left" title="Left"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"/></svg></button>
+  <button class="rc-dir rc-right" data-key="Right" aria-label="Right" title="Right"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button>
+  <button class="rc-dir rc-down" data-key="Down" aria-label="Down" title="Down"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+  <button class="rc-ok" data-key="Return" aria-label="OK" title="OK"><span>OK</span></button>
+</div>
+<div class="rc-row">
+  <button class="rc-round" data-key="XF86Back" aria-label="Back" title="Back"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg></button>
+  <button class="rc-round" data-key="XF86Home" aria-label="Home" title="Home"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11 12 4l9 7"/><path d="M5.5 9.5V20h13V9.5"/></svg></button>
+  <button class="rc-round" data-key="XF86Exit" aria-label="Exit" title="Exit"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+</div>
+<div class="rc-rockers">
+<div class="rc-rocker" role="group" aria-label="Volume">
+  <button class="rc-rk rc-rk-top" data-key="XF86AudioRaiseVolume" aria-label="Volume up" title="Volume up"><span>+</span></button>
+  <button class="rc-rk rc-rk-mid" data-key="XF86AudioMute" aria-label="Mute" title="Mute"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="m16 9 5 6"/><path d="m21 9-5 6"/></svg><small>VOL</small></button>
+  <button class="rc-rk rc-rk-bot" data-key="XF86AudioLowerVolume" aria-label="Volume down" title="Volume down"><span>−</span></button>
+</div>
+<div class="rc-mid">
+  <button class="rc-txt" data-key="XF86NumberPad" aria-label="Number pad on the TV" title="Number pad on the TV"><span>123</span></button>
+  <button class="rc-txt" data-key="XF86ChannelList" aria-label="Channel list" title="Channel list"><span>LIST</span></button>
+  <button class="rc-txt" data-key="XF86Search" aria-label="Search" title="Search"><span>FIND</span></button>
+</div>
+<div class="rc-rocker" role="group" aria-label="Channel">
+  <button class="rc-rk rc-rk-top" data-key="XF86RaiseChannel" aria-label="Channel up" title="Channel up"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 15 6-6 6 6"/></svg></button>
+  <span class="rc-rk rc-rk-mid rc-label"><small>CH</small></span>
+  <button class="rc-rk rc-rk-bot" data-key="XF86LowerChannel" aria-label="Channel down" title="Channel down"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+</div></div>
+<div class="rc-apps">
+  <button id="screenLauncher" class="rc-app" aria-label="Vetro launcher" title="Open the Vetro launcher on the TV">Launcher</button>
+  <button id="screenKbd" class="rc-app" aria-pressed="false" title="Send this computer&#39;s keyboard to the TV"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M6 14h.01M18 14h.01M9.5 14h5"/></svg>Keyboard</button>
+</div>
+  <button id="rcMore" class="rc-txt rc-more" aria-expanded="true" aria-controls="rcKeys" title="Show or hide the number pad and the extra keys">‹ HIDE KEYS</button>
+</div>
+<div class="rc-col rc-keys" id="rcKeys">
+<div class="rc-pad" role="group" aria-label="Number pad">
+  <button class="rc-num" data-key="1" aria-label="1" title="1"><span>1</span></button>
+  <button class="rc-num" data-key="2" aria-label="2" title="2"><span>2</span></button>
+  <button class="rc-num" data-key="3" aria-label="3" title="3"><span>3</span></button>
+  <button class="rc-num" data-key="4" aria-label="4" title="4"><span>4</span></button>
+  <button class="rc-num" data-key="5" aria-label="5" title="5"><span>5</span></button>
+  <button class="rc-num" data-key="6" aria-label="6" title="6"><span>6</span></button>
+  <button class="rc-num" data-key="7" aria-label="7" title="7"><span>7</span></button>
+  <button class="rc-num" data-key="8" aria-label="8" title="8"><span>8</span></button>
+  <button class="rc-num" data-key="9" aria-label="9" title="9"><span>9</span></button>
+  <button class="rc-num rc-num-s" data-key="XF86TTXMIX" aria-label="Teletext" title="Teletext"><span>TTX</span></button>
+  <button class="rc-num" data-key="0" aria-label="0" title="0"><span>0</span></button>
+  <button class="rc-num rc-num-s" data-key="XF86PreviousChannel" aria-label="Previous channel" title="Previous channel"><span>PRE-CH</span></button>
+</div>
+<div class="rc-colors" role="group" aria-label="Colour keys">
+  <button class="rc-color rc-red" data-key="XF86Red" aria-label="Red (A)" title="Red (A)"><span>A</span></button>
+  <button class="rc-color rc-green" data-key="XF86Green" aria-label="Green (B)" title="Green (B)"><span>B</span></button>
+  <button class="rc-color rc-yellow" data-key="XF86Yellow" aria-label="Yellow (C)" title="Yellow (C)"><span>C</span></button>
+  <button class="rc-color rc-blue" data-key="XF86Blue" aria-label="Blue (D)" title="Blue (D)"><span>D</span></button>
+</div>
+<div class="rc-play" role="group" aria-label="Playback">
+  <button class="rc-pb" data-key="XF86AudioRewind" aria-label="Rewind" title="Rewind"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" stroke="none"><path d="M11 6v12l-8-6zM21 6v12l-8-6z"/></svg></button>
+  <button class="rc-pb" data-key="XF86AudioPlay" aria-label="Play" title="Play"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" stroke="none"><path d="M7 5v14l12-7z"/></svg></button>
+  <button class="rc-pb" data-key="XF86AudioPause" aria-label="Pause" title="Pause"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" stroke="none"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg></button>
+  <button class="rc-pb" data-key="XF86AudioForward" aria-label="Fast forward" title="Fast forward"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" stroke="none"><path d="M13 6v12l8-6zM3 6v12l8-6z"/></svg></button>
+  <button class="rc-pb" data-key="XF86AudioPrev" aria-label="Previous" title="Previous"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" stroke="none"><path d="M6 5h2.5v14H6zM20 5v14l-10-7z"/></svg></button>
+  <button class="rc-pb" data-key="XF86AudioStop" aria-label="Stop" title="Stop"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" stroke="none"><rect x="6" y="6" width="12" height="12" rx="1"/></svg></button>
+  <button class="rc-pb rc-rec" data-key="XF86AudioRecord" aria-label="Record" title="Record"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" stroke="none"><circle cx="12" cy="12" r="6"/></svg></button>
+  <button class="rc-pb" data-key="XF86AudioNext" aria-label="Next" title="Next"><svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor" stroke="none"><path d="M15.5 5H18v14h-2.5zM4 5v14l10-7z"/></svg></button>
+</div>
+<div class="rc-extra">
+  <button class="rc-txt" data-key="XF86Caption" aria-label="Subtitles" title="Subtitles"><span>SUBT</span></button>
+  <button class="rc-txt" data-key="XF86AudioDescription" aria-label="Audio description" title="Audio description"><span>AD</span></button>
+  <button class="rc-txt" data-key="XF86PictureSize" aria-label="Picture size" title="Picture size"><span>P.SIZE</span></button>
+  <button class="rc-txt" data-key="XF86DiscretSourceTV" aria-label="Live TV" title="Live TV"><span>TV</span></button>
+  <button class="rc-txt" data-key="XF86Apps" aria-label="Apps" title="Apps"><span>APPS</span></button>
+  <button class="rc-txt" data-key="XF86EManual" aria-label="e-Manual" title="e-Manual"><span>E-MANUAL</span></button>
+  <button class="rc-txt" data-key="XF86MultiView" aria-label="Multi View" title="Multi View"><span>MULTI</span></button>
+  <button class="rc-txt" data-key="XF86Ambient" aria-label="Ambient mode" title="Ambient mode"><span>AMBIENT</span></button>
+  <button class="rc-txt" data-key="XF86Sleep" aria-label="Sleep timer" title="Sleep timer"><span>SLEEP</span></button>
+  <button class="rc-txt" data-key="XF86Netflix" aria-label="Netflix" title="Netflix"><span>NETFLIX</span></button>
+  <button class="rc-txt" data-key="XF86Amazon" aria-label="Prime Video" title="Prime Video"><span>PRIME</span></button>
+  <button class="rc-txt" data-key="XF86KeyTVPlus" aria-label="Samsung TV Plus" title="Samsung TV Plus"><span>TV PLUS</span></button>
+</div></div></div>
+  <p class="rc-note" id="screenKbdNote" aria-live="polite">Hold a button for a long press.</p>
+</div></div>
+<script>
+function $(id){return document.getElementById(id)}
 function api(url,body){var o=body===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)};
   return fetch(url,o).then(function(r){return r.json().catch(function(){return {}}).then(function(d){if(!r.ok)throw new Error(d.error||('The TV answered '+r.status));return d})})}
 function say(t){$('status').textContent=t}
@@ -116,4 +317,6 @@ window.addEventListener('blur',function(){if(kbdOn)kbdSet(false);else rcLiftAll(
 window.addEventListener('pagehide',function(){try{navigator.sendBeacon('control',JSON.stringify({release:true}))}catch(e){}});
 $('screenKbd').onclick=function(){kbdSet(!kbdOn);this.blur()};
 
-takeShot(false);</script></body></html>
+takeShot(false);
+</script>
+</body></html>

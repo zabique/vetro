@@ -40,7 +40,7 @@ assert.strictEqual(shard.status().helper, true);
 call('GET', 'ui', undefined, function (code, html) {
     assert.strictEqual(code, 200); assert.ok(html.indexOf('id="screenKeys"') > 0);
     call('GET', 'prefs', undefined, function (code2, text) {
-        assert.deepEqual(JSON.parse(text), { zoom: 'fit', keys: true });
+        assert.deepEqual(JSON.parse(text), { keys: true });
         call('POST', 'control', JSON.stringify({ events: [{ key: 'Shift_L', state: 'down' }, { key: 'a' }] }), function (code3, text3) {
             assert.strictEqual(code3, 200);
             // the key command is base-64 free and holds only whitelisted names

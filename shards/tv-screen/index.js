@@ -309,17 +309,15 @@ module.exports = function (ctx) {
         });
     }
 
-    // What the page remembers (its frame has no storage): the picture size and whether the extra keys are shown.
-    var ZOOMS = ['fit', '1', '1.5', '2'];
+    // What the page remembers (its frame has no storage): whether the extra keys are shown.
     function prefs() {
         var c = ctx.config.get() || {};
-        return { zoom: ZOOMS.indexOf(c.zoom) >= 0 ? c.zoom : 'fit', keys: c.keys !== false };
+        return { keys: c.keys !== false };
     }
     function savePrefs(req, res) {
         readBody(req, function (p) {
             if (!p) return json(res, { error: 'JSON body expected' }, 400);
             var now = prefs();
-            if (ZOOMS.indexOf(p.zoom) >= 0) now.zoom = p.zoom;
             if (typeof p.keys === 'boolean') now.keys = p.keys;
             try { ctx.config.set(now); } catch (e) { return json(res, { ok: false, error: String(e.message || e) }, 500); }
             json(res, now);

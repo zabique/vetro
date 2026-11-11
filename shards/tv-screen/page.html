@@ -5,11 +5,13 @@
 <meta name="color-scheme" content="dark light">
 <title>TV Screen</title>
 <style>
-:root{--vetro-action:#3b6cf6;--s3:12px;--edge:rgba(128,128,128,.4);--zoom:1.5}
+:root{--vetro-action:#3b6cf6;--s3:12px;--edge:rgba(128,128,128,.4)}
 *{box-sizing:border-box}
 body{font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;margin:16px;color:CanvasText;background:Canvas}
 .layout{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
-.view{flex:0 0 auto;max-width:100%;min-width:0;width:fit-content}
+/* the picture takes the room the remote leaves (a Shard page cannot widen the dashboard); below 900px the remote goes under it */
+@media (min-width:900px){.layout{flex-wrap:nowrap}}
+.view{flex:1 1 0;min-width:min(100%,480px)}
 .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 8px;width:0;min-width:100%}
 .bar h2{font-size:17px;margin:0 auto 0 0}
 .ui{font:inherit;height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--edge);background:transparent;color:inherit;cursor:pointer}
@@ -17,18 +19,12 @@ body{font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;margin:16px;co
 .ui:disabled{opacity:.5;cursor:default}
 .ui:focus-visible{outline:2px solid var(--vetro-action);outline-offset:2px}
 .ui.primary{background:var(--vetro-action);border-color:var(--vetro-action);color:#fff}
-.zoom{display:flex;border:1px solid var(--edge);border-radius:8px;overflow:hidden}
-.zoom .ui{border:0;border-radius:0;padding:0 11px}
-.zoom .ui[aria-pressed=true]{background:var(--vetro-action);color:#fff}
-.frame{position:relative;width:calc(640px*var(--zoom));max-width:100%;border:1px solid var(--edge);border-radius:8px;overflow:hidden;background:#000}
+.frame{position:relative;width:100%;border:1px solid var(--edge);border-radius:8px;overflow:hidden;background:#000}
 .frame canvas{display:block;width:100%;height:auto}
 .frame img{position:absolute;top:0;left:0;width:100%;height:100%;display:block;background:#000;object-fit:fill}
 .frame img[hidden]{display:none}
 .status{font-size:13px;opacity:.75;margin:0 0 8px;min-height:1.45em;width:0;min-width:100%}
 .remote{flex:0 0 auto;display:grid;justify-items:center;max-width:100%}
-/* Fit: the picture takes the room the remote leaves (a Shard page cannot widen the dashboard) */
-@media (min-width:900px){.layout.fit{flex-wrap:nowrap}.layout.fit .view{flex:1 1 0;width:auto}}
-.layout.fit .frame{width:100%}
 .rc-note{opacity:.75}
 
 /* the remote */
@@ -112,15 +108,9 @@ body{font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif;margin:16px;co
 </style>
 </head>
 <body>
-<div class="layout fit" id="layout">
+<div class="layout">
 <div class="view">
 <div class="bar"><h2>TV screen</h2>
-<div class="zoom" id="zoom" role="group" aria-label="Picture size">
-  <button class="ui" data-zoom="fit" aria-pressed="true">Fit</button>
-  <button class="ui" data-zoom="1" aria-pressed="false">1×</button>
-  <button class="ui" data-zoom="1.5" aria-pressed="false">1.5×</button>
-  <button class="ui" data-zoom="2" aria-pressed="false">2×</button>
-</div>
   <button class="ui primary" id="live">Watch live</button>
   <button class="ui" id="shot">Take a picture</button>
 </div>
@@ -236,7 +226,9 @@ function liveStatus(){api('live').then(function(d){if(!liveOn)return;if(d.runnin
   say(d.protect===1?'Live · protected video (DRM/HDCP): the TV refuses to capture it':'Live · '+d.fps+' fps · '+shape(d.width,d.height))}).catch(function(){})}
 function liveStart(){var i=$('stream');liveOn=true;i.hidden=false;i.src='stream?t='+Date.now();$('live').textContent='Stop live';
   say('Starting the live view…');liveTimer=setInterval(liveStatus,2000)}
-function liveStop(text){if(!liveOn)return;liveOn=false;clearInterval(liveTimer);var i=$('stream');i.removeAttribute('src');i.hidden=true;
+function liveStop(text){if(!liveOn)return;liveOn=false;clearInterval(liveTimer);var i=$('stream');
+  try{$('canvas').getContext('2d').drawImage(i,0,0,1920,1080)}catch(e){}   /* the last frame stays as the still picture */
+  i.removeAttribute('src');i.hidden=true;
   $('live').textContent='Watch live';say(text||'Live view stopped.')}
 /* a picture is saved the way the browser saves a download; the images are asked for with CORS so the canvas can be read back */
 function stamp(){var d=new Date();function p(n){return (n<10?'0':'')+n}return d.getFullYear()+p(d.getMonth()+1)+p(d.getDate())+'-'+p(d.getHours())+p(d.getMinutes())+p(d.getSeconds())}
@@ -257,21 +249,17 @@ function takeShot(save){if(busy)return;busy=true;$('shot').disabled=true;say('Ca
     if(save)savePng(c)})})
   .catch(function(e){say(e.message)}).then(function(){busy=false;$('shot').disabled=false})}
 $('shot').onclick=function(){if(liveOn)saveLiveFrame();else takeShot(true)};
-$('live').onclick=function(){if(liveOn)liveStop();else liveStart()};
+/* the live view plays by itself; Stop is remembered until the page is opened again */
+var wantLive=true;
+$('live').onclick=function(){wantLive=!liveOn;if(liveOn)liveStop();else liveStart()};
 $('stream').onerror=function(){if(liveOn)liveStop('The live view could not start.')};
-document.addEventListener('visibilitychange',function(){if(document.hidden)liveStop()});
-
-/* picture size */
-function zoom(z,quiet){if(z!=='fit'&&z!=='1'&&z!=='1.5'&&z!=='2')return;$('layout').classList.toggle('fit',z==='fit');if(z!=='fit')document.documentElement.style.setProperty('--zoom',z);
-  Array.prototype.forEach.call($('zoom').querySelectorAll('[data-zoom]'),function(b){b.setAttribute('aria-pressed',b.dataset.zoom===z?'true':'false')});
-  if(!quiet)api('prefs',{zoom:z}).catch(function(){})}
-$('zoom').onclick=function(e){var b=e.target.closest('[data-zoom]');if(b)zoom(b.dataset.zoom)};
+document.addEventListener('visibilitychange',function(){if(document.hidden)liveStop();else if(wantLive&&!liveOn)liveStart()});
 /* the right half of the remote folds away */
 function rcMore(open,quiet){$('screenKeys').classList.toggle('rc-collapsed',!open);var b=$('rcMore');b.setAttribute('aria-expanded',open?'true':'false');
   b.textContent=open?'‹ HIDE KEYS':'MORE KEYS ›';if(!quiet)api('prefs',{keys:open}).catch(function(){})}
 $('rcMore').onclick=function(){rcMore(this.getAttribute('aria-expanded')!=='true')};
-/* the page is sandboxed and has no storage of its own: the Shard keeps the two choices */
-api('prefs').then(function(p){zoom(p.zoom,true);if(p.keys===false)rcMore(false,true)}).catch(function(){});
+/* the page is sandboxed and has no storage of its own: the Shard keeps the choice */
+api('prefs').then(function(p){if(p.keys===false)rcMore(false,true)}).catch(function(){});
 
 /* remote: a button is down while it is held; events go out in order, batched while a request is in flight */
 var rcQueue=[],rcBusy=false,rcDown={},kbdOn=false,kbdHeld={};
@@ -317,6 +305,6 @@ window.addEventListener('blur',function(){if(kbdOn)kbdSet(false);else rcLiftAll(
 window.addEventListener('pagehide',function(){try{navigator.sendBeacon('control',JSON.stringify({release:true}))}catch(e){}});
 $('screenKbd').onclick=function(){kbdSet(!kbdOn);this.blur()};
 
-takeShot(false);
+liveStart();
 </script>
 </body></html>

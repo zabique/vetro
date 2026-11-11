@@ -1,7 +1,7 @@
 {
   "id": "tv-screen",
   "name": "TV Screen",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "apiVersion": 1,
   "author": "zabique",
   "description": "See the TV screen (picture or live view) and drive it with a full remote, long presses and this computer's keyboard. No internet access.",

@@ -2,8 +2,9 @@
 
 A Vetro Shard: see what the TV shows and drive it from the dashboard (**Vetro Shards → TV-Screen**).
 
-- **Picture or live view** of the whole screen (video and menus), fitted beside the remote or at 1x, 1.5x or 2x.
-  The live view always asks for the best the TV gives (30 fps, quality 95, source resolution).
+- **Live view** of the whole screen (video and menus), fitted beside the remote. It starts when the page opens
+  and always asks for the best the TV gives (30 fps, quality 95, source resolution). Stop live shows a still
+  picture instead.
 - **Take a picture** saves a 1920x1080 PNG through the browser's downloads (in live view: the current frame).
 - **Full remote**: number pad, colour keys, playback, Settings, Guide, app keys. Holding a button is a real long
   press. The right half folds away.
@@ -15,13 +16,14 @@ It talks to nothing outside the TV.
 
 ## The `exec` permission: commands it runs
 
-All as root, through `ctx.execute`. Nothing runs while the Shard is only switched on, except the first line.
+All as root, through `ctx.execute`. Nothing runs while the Shard is only switched on, except the first line;
+opening its page starts the live view.
 
 | When | Command |
 | --- | --- |
 | switched on after an install or update, and switched off | `systemctl stop tv-screen-shard-live.service` |
-| Take a picture, and once when the page opens | `/usr/bin/dotnet <Shard folder>/bin/TvCapture.dll <file>.png 1920 1080` into `/opt/usr/home/owner/share/tv-screen-shard/tv-<time>/`; folders older than 10 minutes are removed first. If the TV refuses (protected video): `enlightenment_info -topvwins` and `enlightenment_info -dump topvwins <folder>` |
-| Watch live | `netstat -ltn` (is the helper running?), then `systemd-run --unit=tv-screen-shard-live … /usr/bin/dotnet <Shard folder>/bin/TvCapture.dll --serve 8096 --fps 30 --size 1920x1080 --idle-exit 30` (`setsid nohup …` without systemd-run). The helper listens on `127.0.0.1:8096` only and exits 30 s after the last viewer |
+| Take a picture while the live view is stopped | `/usr/bin/dotnet <Shard folder>/bin/TvCapture.dll <file>.png 1920 1080` into `/opt/usr/home/owner/share/tv-screen-shard/tv-<time>/`; folders older than 10 minutes are removed first. If the TV refuses (protected video): `enlightenment_info -topvwins` and `enlightenment_info -dump topvwins <folder>` |
+| the page opens, Watch live | `netstat -ltn` (is the helper running?), then `systemd-run --unit=tv-screen-shard-live … /usr/bin/dotnet <Shard folder>/bin/TvCapture.dll --serve 8096 --fps 30 --size 1920x1080 --idle-exit 30` (`setsid nohup …` without systemd-run). The helper listens on `127.0.0.1:8096` only and exits 30 s after the last viewer |
 | a remote button or a key | `dbus-send --system … org.enlightenment.wm.Test.EventKey uint32:<1 or 0> string:<key>`: down and up are separate events. The key must be on the fixed list in `index.js`; nothing else from a request reaches a command line. A key left down is released after 20 s |
 | Launcher | `echo show > /home/owner/tvlauncher.fifo` (only if that pipe exists) |
 

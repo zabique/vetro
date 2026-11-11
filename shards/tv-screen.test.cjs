@@ -23,9 +23,9 @@ function call(method,sub,url,body){return new Promise(r=>{const EE=require('even
  r=await call('POST','control',null,'{"events":[{"key":"rm -rf"}]}');assert.equal(r.code,400);
  r=await call('POST','control',null,'nonsense');assert.equal(r.code,400);
  r=await call('GET','file','/x/file?id=screen&at=1');assert.equal(r.code,404);
- r=await call('GET','prefs');assert.deepEqual(JSON.parse(r.body),{zoom:'fit',keys:true});
- r=await call('POST','prefs',null,JSON.stringify({zoom:'2',keys:false,x:1}));assert.deepEqual(saved,{zoom:'2',keys:false});
- r=await call('POST','prefs',null,JSON.stringify({zoom:'9'}));assert.deepEqual(JSON.parse(r.body),{zoom:'2',keys:false});
+ r=await call('GET','prefs');assert.deepEqual(JSON.parse(r.body),{keys:true});
+ r=await call('POST','prefs',null,JSON.stringify({zoom:'2',keys:false,x:1}));assert.deepEqual(saved,{keys:false});
+ r=await call('POST','prefs',null,JSON.stringify({keys:'yes'}));assert.deepEqual(JSON.parse(r.body),{keys:false});
  r=await call('GET','nothing');assert.equal(r.handled,false);
  r=await call('GET','shot');assert.equal(r.code,503);
  p.stop();console.log('shard smoke: ok');
